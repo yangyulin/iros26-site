@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IROS 2026 Papers</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">IROS 2026 <span>Pittsburgh · 27 Sep – 1 Oct</span></div>
+    <nav>
+      <a href="index.html" aria-current="page">Papers</a>
+      <span class="nav-soon" title="Not built yet">Workshops</span>
+      <span class="nav-soon" title="Not built yet">Schedule</span>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <aside class="filters" aria-label="Filters">
+      <label class="field">
+        <span>Search</span>
+        <input id="q" type="search" placeholder="title, author, affiliation, keyword…" autocomplete="off">
+      </label>
+
+      <fieldset class="field">
+        <legend>Day</legend>
+        <div id="days" class="chips"></div>
+      </fieldset>
+
+      <label class="field">
+        <span>Session type</span>
+        <select id="type"><option value="">All types</option></select>
+      </label>
+
+      <label class="field">
+        <span>Session</span>
+        <select id="session"><option value="">All sessions</option></select>
+      </label>
+
+      <label class="field">
+        <span>Keyword</span>
+        <select id="kw"><option value="">All keywords</option></select>
+      </label>
+
+      <div class="field toggles">
+        <label><input id="rel" type="checkbox"> Calibration &amp; state estimation only</label>
+        <label><input id="star" type="checkbox"> Bookmarked only <span id="star-count" class="muted"></span></label>
+      </div>
+
+      <label class="field">
+        <span>Sort</span>
+        <select id="sort">
+          <option value="time">Day &amp; time</option>
+          <option value="title">Title</option>
+        </select>
+      </label>
+
+      <button id="reset" type="button" class="link-btn">Clear all filters</button>
+    </aside>
+
+    <section class="results" aria-live="polite">
+      <p id="summary" class="summary">Loading papers…</p>
+      <div id="list"></div>
+      <button id="more" type="button" class="more" hidden></button>
+    </section>
+  </main>
+
+  <script src="assets/papers.js"></script>
+</body>
+</html>

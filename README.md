@@ -1,7 +1,12 @@
 # iros26-site
 
-Personal browsable program for IROS 2026 (Pittsburgh, 27 Sep – 1 Oct 2026):
+Searchable program for IROS 2026 (Pittsburgh, 27 Sep – 1 Oct 2026):
 papers, workshops and schedule. Tracked in mira: `tasks/iros-26/website/`.
+
+## Site
+
+Static HTML/CSS/JS (`index.html`, `assets/`) over `data/papers.json`, served by GitHub Pages:
+https://yangyulin.github.io/iros26-site/. Local preview: `python3 -m http.server`.
 
 ## Data
 
@@ -22,3 +27,7 @@ Notes:
   (Wednesday 08:30 talks) need a manual check.
 - Papers have no abstracts. `relevant` = regex match on calibration / VIO / SLAM / state-estimation terms
   (see `RELEVANT` in the build script).
+
+- `raw/papers_gisbi-kim.json` is not in this repo (upstream has no license); fetch it from
+  gisbi-kim/iros2026-explorer to re-run the build. Program data © IEEE/IROS 2026 organizers;
+  credit to gisbi-kim for the index parse.
