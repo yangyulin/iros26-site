@@ -1,0 +1,19 @@
+{
+  "_comment": "Poster photo -> paper id. Boxes are [x0, y0, x1, y1] in 1600px-preview coordinates (after EXIF rotation). crop keeps the poster; blur hides bystanders' faces. skip = not published.",
+  "photos": [
+    {"file": "IMG_2787.JPG", "paper": "3549", "crop": [150, 100, 1480, 1190], "blur": [[1130, 480, 1480, 1190]]},
+    {"file": "IMG_2788.JPG", "paper": "3549", "skip": "presenter's face covers the poster; IMG_2787 shows the same poster"},
+    {"file": "IMG_2789.JPG", "paper": "3315"},
+    {"file": "IMG_2790.JPG", "paper": "814"},
+    {"file": "IMG_2791.JPG", "paper": "6", "crop": [50, 50, 1420, 1200]},
+    {"file": "IMG_2792.JPG", "paper": "968"},
+    {"file": "IMG_2793.JPG", "paper": "3228", "crop": [300, 90, 1180, 1200]},
+    {"file": "IMG_2794.JPG", "paper": "3998", "crop": [40, 240, 1150, 1600]},
+    {"file": "IMG_2795.JPG", "paper": "2400"},
+    {"file": "IMG_2796.JPG", "paper": "5006"},
+    {"file": "IMG_2797.JPG", "paper": "5012", "crop": [140, 80, 1520, 1130], "blur": [[1300, 600, 1520, 1130]]},
+    {"file": "IMG_2798.JPG", "paper": "3784"},
+    {"file": "IMG_2799.JPG", "paper": "3520", "crop": [110, 0, 1330, 1200]},
+    {"file": "IMG_2800.JPG", "paper": "3172", "crop": [80, 30, 1300, 1200]}
+  ]
+}

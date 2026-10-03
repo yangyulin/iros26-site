@@ -1,2 +1,6 @@
 # Third-party parse with no license: kept locally, not published.
 data/raw/papers_gisbi-kim.json
+
+# Full-size originals from Drive; only resized copies are published.
+photos/raw/
+photos/preview/

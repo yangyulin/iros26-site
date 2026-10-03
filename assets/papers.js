@@ -1,6 +1,7 @@
 // IROS 2026 paper list: search, filters, bookmarks, and per-paper photo notes.
 // Data: data/papers.json (scripts/build_data.py) and optional data/notes.json
-// ({ "<paper id>": [{ "src": "notes/<file>", "caption": "..." }] }).
+// ({ "<paper id>": { "text": "...", "photos": [{ "src": "notes/<id>/<file>.webp", "thumb": "..." }] } },
+// written by scripts/add_photos.py; "text" is plain text, blank lines separate paragraphs).
 (() => {
   "use strict";
 
@@ -12,7 +13,7 @@
   const $ = (id) => document.getElementById(id);
   const els = {
     q: $("q"), days: $("days"), type: $("type"), session: $("session"), kw: $("kw"),
-    rel: $("rel"), star: $("star"), starCount: $("star-count"), sort: $("sort"),
+    rel: $("rel"), star: $("star"), noted: $("noted"), notedCount: $("noted-count"), starCount: $("star-count"), sort: $("sort"),
     reset: $("reset"), summary: $("summary"), list: $("list"), more: $("more"),
   };
 
@@ -20,7 +21,7 @@
   let notes = {};
   let stars = loadStars();
   let shown = PAGE;
-  const state = { q: "", days: new Set(), type: "", session: "", kw: "", rel: false, star: false, sort: "time" };
+  const state = { q: "", days: new Set(), type: "", session: "", kw: "", rel: false, star: false, noted: false, sort: "time" };
 
   function loadStars() {
     try { return new Set(JSON.parse(localStorage.getItem(STAR_KEY) || "[]")); } catch { return new Set(); }
@@ -48,6 +49,7 @@
     if (state.kw && !p.keywords.includes(state.kw)) return false;
     if (state.rel && !p.relevant) return false;
     if (state.star && !stars.has(p.id)) return false;
+    if (state.noted && !notes[p.id]) return false;
     return ts.every((t) => p._hay.includes(t));
   }
 
@@ -80,11 +82,22 @@
   }
 
   function notesHtml(p) {
-    const ns = notes[p.id];
-    if (!ns || !ns.length) return "";
-    return `<div class="notes">` + ns.map((n) =>
-      `<a href="${esc(n.src)}" target="_blank" rel="noopener"><img src="${esc(n.thumb || n.src)}" alt="${esc(n.caption || "Photo note")}" loading="lazy"></a>`
-    ).join("") + `</div>`;
+    const n = notes[p.id];
+    if (!n) return "";
+    const text = (n.text || "").trim();
+    const paras = text ? text.split(/\n\s*\n/).map((t) => `<p>${esc(t)}</p>`).join("") : "";
+    const photos = (n.photos || []).map((ph) =>
+      `<a href="${esc(ph.src)}" target="_blank" rel="noopener"><img src="${esc(ph.thumb || ph.src)}" alt="Poster photo" loading="lazy"></a>`
+    ).join("");
+    return `<div class="notes">${paras ? `<div class="note-text">${paras}</div>` : ""}${photos ? `<div class="note-photos">${photos}</div>` : ""}</div>`;
+  }
+
+  function noteBadge(p) {
+    const n = notes[p.id];
+    if (!n) return "";
+    const k = (n.photos || []).length;
+    const label = [n.text && n.text.trim() ? "notes" : "", k ? `${k} photo${k > 1 ? "s" : ""}` : ""].filter(Boolean).join(" · ");
+    return label ? `<span class="badge award">${label}</span>` : "";
   }
 
   function paperHtml(p, ts) {
@@ -92,7 +105,7 @@
     const badges =
       (p.relevant ? `<span class="badge">calib &amp; state est.</span>` : "") +
       (p.session_type === "Award Candidates" ? `<span class="badge award">award candidate</span>` : "") +
-      (notes[p.id] ? `<span class="badge award">${notes[p.id].length} photo${notes[p.id].length > 1 ? "s" : ""}</span>` : "");
+      noteBadge(p);
     return `<article class="paper${p.relevant ? " is-rel" : ""}" id="p${esc(p.id)}">
       <div class="when"><b>${p.time}</b>${DAY_SHORT[p.day]} · Rm ${esc(p.room)}</div>
       <div>
@@ -148,6 +161,7 @@
     for (const k of ["type", "session", "kw", "sort"]) if (state[k] && !(k === "sort" && state[k] === "time")) h.set(k, state[k]);
     if (state.rel) h.set("rel", "1");
     if (state.star) h.set("star", "1");
+    if (state.noted) h.set("notes", "1");
     const s = h.toString();
     history.replaceState(null, "", s ? `#${s}` : location.pathname);
   }
@@ -162,6 +176,7 @@
     state.sort = h.get("sort") === "title" ? "title" : "time";
     state.rel = h.get("rel") === "1";
     state.star = h.get("star") === "1";
+    state.noted = h.get("notes") === "1";
   }
 
   function syncControls() {
@@ -171,6 +186,7 @@
     els.kw.value = state.kw;
     els.rel.checked = state.rel;
     els.star.checked = state.star;
+    els.noted.checked = state.noted;
     els.sort.value = state.sort;
   }
 
@@ -218,7 +234,7 @@
     for (const k of ["type", "session", "kw", "sort"]) {
       els[k].addEventListener("change", () => { state[k] = els[k].value; update(); });
     }
-    for (const k of ["rel", "star"]) {
+    for (const k of ["rel", "star", "noted"]) {
       els[k].addEventListener("change", () => { state[k] = els[k].checked; update(); });
     }
     els.days.addEventListener("click", (e) => {
@@ -229,7 +245,7 @@
       update();
     });
     els.reset.addEventListener("click", () => {
-      Object.assign(state, { q: "", days: new Set(), type: "", session: "", kw: "", rel: false, star: false, sort: "time" });
+      Object.assign(state, { q: "", days: new Set(), type: "", session: "", kw: "", rel: false, star: false, noted: false, sort: "time" });
       syncControls();
       update();
     });
@@ -277,6 +293,8 @@
     for (const p of papers) {
       p._hay = [p.title, p.code, p.session, p.room, ...p.authors, ...p.affiliations, ...p.keywords].join(" \u0001 ").toLowerCase();
     }
+    const nNotes = Object.keys(notes).length;
+    els.notedCount.textContent = nNotes ? `(${nNotes})` : "";
     fillSelects();
     readHash();
     syncControls();

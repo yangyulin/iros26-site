@@ -31,3 +31,10 @@ Notes:
 - `raw/papers_gisbi-kim.json` is not in this repo (upstream has no license); fetch it from
   gisbi-kim/iros2026-explorer to re-run the build. Program data © IEEE/IROS 2026 organizers;
   credit to gisbi-kim for the index parse.
+
+## Poster notes
+
+Photos from the Drive folder `Iros2026` → `photos/raw/` (gitignored, via `rclone copy gdrive: photos/raw --drive-root-folder-id <folder id>`).
+`photos/matches.json` maps each photo to a paper id, with crop/blur boxes that remove bystanders' faces.
+`python3 scripts/add_photos.py` writes EXIF-free WebP (1600px + 480px thumb) to `notes/<paper id>/` and merges
+them into `data/notes.json`. Add your own text under `"text"` for a paper in `data/notes.json` (blank line = new paragraph).
