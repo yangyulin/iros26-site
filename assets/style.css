@@ -211,3 +211,10 @@ mark { background: #fff1a8; color: inherit; border-radius: 2px; }
 .note-text p { margin: 0 0 6px; }
 .note-photos { display: flex; flex-wrap: wrap; gap: 8px; }
 .note-photos img { width: 160px; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
+
+.slot-head { margin: 14px 0 8px; font-size: 14px; font-weight: 600; }
+.slot-head .muted { font-weight: 400; margin-left: 6px; }
+.small { font-size: 12.5px; margin: 0; }
+.meta a { color: var(--accent); text-decoration: none; }
+.meta a:hover { text-decoration: underline; }
+.ws .when b { font-size: 14px; }
