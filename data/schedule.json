@@ -422,36 +422,6 @@
  {
   "date": "2026-09-30",
   "day": "Wednesday",
-  "start": "08:30",
-  "end": "09:00",
-  "title": "Contributed Talks (Focused)",
-  "type": "contributed_talks",
-  "room": "",
-  "notes": "unverified block (extraction quirk?)"
- },
- {
-  "date": "2026-09-30",
-  "day": "Wednesday",
-  "start": "08:30",
-  "end": "09:00",
-  "title": "Contributed Talks (Lightning)",
-  "type": "contributed_talks",
-  "room": "",
-  "notes": "unverified block (extraction quirk?)"
- },
- {
-  "date": "2026-09-30",
-  "day": "Wednesday",
-  "start": "08:30",
-  "end": "09:00",
-  "title": "Contributed Talks (Special)",
-  "type": "contributed_talks",
-  "room": "",
-  "notes": "unverified block (extraction quirk?)"
- },
- {
-  "date": "2026-09-30",
-  "day": "Wednesday",
   "start": "09:00",
   "end": "10:15",
   "title": "Contributed Talks (Focused)",

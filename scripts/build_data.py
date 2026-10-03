@@ -82,6 +82,9 @@ def build_workshops():
 
 def build_schedule():
     rows = read_jsonl(RAW / "schedule.jsonl")
+    # The grid extraction produced Wednesday 08:30-09:00 talk blocks that the paper data contradicts:
+    # no paper on any day starts before 09:00, and Mon/Tue have no such block. Drop them.
+    rows = [r for r in rows if "unverified" not in r.get("notes", "")]
     for r in rows:
         assert DATES[r["day"]] == r["date"], r
     rows.sort(key=lambda r: (r["date"], r["start"], r["title"]))
@@ -89,6 +92,7 @@ def build_schedule():
 
 
 def check(papers, workshops, schedule):
+    assert len(schedule) == 65, len(schedule)
     assert len(papers) == 1933, len(papers)
     assert len({p["id"] for p in papers}) == len(papers), "duplicate paper ids"
     assert len(workshops) == 86, len(workshops)

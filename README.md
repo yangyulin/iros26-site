@@ -5,7 +5,7 @@ papers, workshops and schedule. Tracked in mira: `tasks/iros-26/website/`.
 
 ## Site
 
-Static HTML/CSS/JS (`index.html`, `assets/`) over `data/papers.json`, served by GitHub Pages:
+Static HTML/CSS/JS — `index.html` (papers), `workshops.html`, `schedule.html`, `assets/` — over `data/papers.json`, served by GitHub Pages:
 https://yangyulin.github.io/iros26-site/. Local preview: `python3 -m http.server`.
 
 ## Data
@@ -23,8 +23,8 @@ Notes:
 - The official site blocks scripted downloads (Cloudflare WAF 403), so the workshop and schedule data
   came from a page fetch, not a scraper. It can't be re-run automatically.
 - The workshop data has no organizers or external URLs yet.
-- The schedule was extracted from a grid by a model. Blocks marked `unverified` in `notes`
-  (Wednesday 08:30 talks) need a manual check.
+- The schedule was extracted from a grid by a model. The Wednesday 08:30 talk blocks it produced are dropped in
+  `build_data.py` (no paper starts before 09:00 on any day), leaving 65 blocks.
 - Papers have no abstracts. `relevant` = regex match on calibration / VIO / SLAM / state-estimation terms
   (see `RELEVANT` in the build script).
 

@@ -218,3 +218,39 @@ mark { background: #fff1a8; color: inherit; border-radius: 2px; }
 .meta a { color: var(--accent); text-decoration: none; }
 .meta a:hover { text-decoration: underline; }
 .ws .when b { font-size: 14px; }
+
+/* Schedule */
+.sched { max-width: 1100px; margin: 0 auto; padding: 20px 24px 60px; }
+.sched-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-bottom: 12px; }
+.plan-toggle { display: flex; align-items: center; gap: 7px; font-size: 14px; cursor: pointer; }
+.row { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 14px; padding: 10px 0; border-top: 1px solid var(--line); }
+.row-time { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 14px; padding-top: 10px; }
+.row-blocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.block { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--muted); border-radius: var(--radius); padding: 9px 12px; }
+.block-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.block-title { font-weight: 600; margin: 2px 0; }
+.block-where, .block-link { font-size: 13px; }
+.block-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.block-link a:hover { text-decoration: underline; }
+.t-contributed_talks, .t-awards { border-left-color: var(--accent); }
+.t-poster, .t-keynote, .t-plenary_panel { border-left-color: #7c3aed; }
+.t-workshop { border-left-color: #0f766e; }
+.t-social, .t-opening, .t-exhibit, .t-forum { border-left-color: var(--rel); }
+.row-break .row-time, .row-break .block-title { font-weight: 400; color: var(--muted); }
+.row-break .block { background: transparent; border-style: dashed; border-left-width: 1px; padding: 5px 12px; }
+.row-break .block-type { display: none; }
+.has-mine { box-shadow: 0 0 0 2px var(--star) inset; }
+.mine { margin: 8px 0 0; padding: 0; list-style: none; font-size: 13px; }
+.mine li { padding: 4px 0; border-top: 1px dashed var(--line); }
+.mine li::before { content: "★ "; color: var(--star); }
+.mine .t { font-variant-numeric: tabular-nums; font-weight: 600; }
+.sched-foot { margin-top: 20px; }
+@media (prefers-color-scheme: dark) {
+  .t-poster, .t-keynote, .t-plenary_panel { border-left-color: #a78bfa; }
+  .t-workshop { border-left-color: #2dd4bf; }
+}
+@media (max-width: 760px) {
+  .sched { padding: 16px 16px 48px; }
+  .row { grid-template-columns: 1fr; gap: 6px; }
+  .row-time { padding-top: 0; }
+}
