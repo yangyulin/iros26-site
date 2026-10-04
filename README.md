@@ -5,8 +5,16 @@ papers, workshops and schedule. Tracked in mira: `tasks/iros-26/website/`.
 
 ## Site
 
-Static HTML/CSS/JS — `index.html` (papers), `workshops.html`, `schedule.html`, `assets/` — over `data/papers.json`, served by GitHub Pages:
-https://yangyulin.github.io/iros26-site/. Local preview: `python3 -m http.server`.
+Astro 6 static site (MVIS look) deployed by `.github/workflows/deploy.yml` to https://yangyulin.net/iros26-site/.
+
+- `src/pages/` — `index.astro` (papers), `paper/[id].astro` (one page per paper: photos, notes, PDF links),
+  `posters.astro` (Photos: papers, workshops, events), `workshops.astro`, `schedule.astro`,
+  `data/papers-index.json.js` (client paper list)
+- `src/lib/` — pure query logic (unit-tested in `tests/*.test.js`), `src/scripts/` — page DOM glue
+- Local: `npm install`, `npm run dev`; checks: `npm test`, `python3 -m unittest discover -s tests -p "test_*.py"`,
+  `npm run build && npm run preview` then `npm run smoke` (`-- <base url>` to test another server)
+- PDF links: `scripts/find_pdfs.py` (arXiv) → `data/pdfs.json`; Infovaya presentation links → `data/infovaya.json`
+  (links only; Infovaya PDFs are never published)
 
 ## Data
 
