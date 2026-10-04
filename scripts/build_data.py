@@ -16,13 +16,19 @@ OUT = ROOT / "data"
 DATES = {"Sunday": "2026-09-27", "Monday": "2026-09-28", "Tuesday": "2026-09-29",
          "Wednesday": "2026-09-30", "Thursday": "2026-10-01"}
 
-# Topics that matter for my work; matched against title + keywords + session title.
-RELEVANT = re.compile(
-    r"calibrat|visual[- ]inertial|\bVIO\b|\bVINS\b|inertial|\bIMU\b|SLAM|odometry|"
-    r"state estimation|sensor fusion|localization|kalman|factor graph|rolling[- ]shutter|"
-    r"event camera|extrinsic",
+# "Calibration & state estimation" topic tag. Title terms + RAS keywords; bare "localization",
+# "inertial" and "sensor fusion" over-matched in v1 (sound-source localization, radar scene recon).
+TOPIC_TITLE = re.compile(
+    r"(?<!confidence )(?<!uncertainty )calibrat(?!ion[- ]free)|visual[- ]inertial|\bVIO\b|\bVINS\b|\bIMU\b|"
+    r"inertial (?:odometry|navigation)|SLAM|odometry|state estimation|kalman|factor graph|"
+    r"rolling[- ]shutter|extrinsic|hand[- ]eye",
     re.I,
 )
+TOPIC_KEYWORDS = {"Calibration and Identification", "Localization"}
+
+
+def is_topic(title, keywords):
+    return bool(TOPIC_TITLE.search(title)) or any(k in TOPIC_KEYWORDS or "SLAM" in k for k in keywords)
 
 
 def read_jsonl(path):
@@ -40,7 +46,6 @@ def build_papers():
     raw = json.loads((RAW / "papers_gisbi-kim.json").read_text())["papers"]
     papers = []
     for p in raw:
-        text = " ".join([p["title"], p["session_title"], *p["keywords"]])
         papers.append({
             "id": p["paper_number"],
             "code": p["code"],
@@ -55,7 +60,7 @@ def build_papers():
             "date": DATES[p["day"]],
             "time": p["time"].zfill(5),  # '9:00' -> '09:00' so times sort as strings
             "room": p["room"],
-            "relevant": bool(RELEVANT.search(text)),
+            "relevant": is_topic(p["title"], p["keywords"]),
         })
     papers.sort(key=lambda p: (p["date"], p["time"], p["room"], p["id"]))
     return papers
@@ -75,7 +80,7 @@ def build_workshops():
             "start": to_24h(start),
             "end": to_24h(end),
             "room": w["room"],
-            "relevant": bool(RELEVANT.search(w["title"])),
+            "relevant": is_topic(w["title"], []),
         })
     return out
 
