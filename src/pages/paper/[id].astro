@@ -1,0 +1,91 @@
+---
+import Base from "../../layouts/Base.astro";
+import { render } from "astro:content";
+import papers from "../../../data/papers.json";
+import { loadNotes } from "../../lib/notes.js";
+import { url } from "../../lib/url.js";
+
+export async function getStaticPaths() {
+  const notes = await loadNotes();
+  const bySession = new Map();
+  for (const p of papers) {
+    if (!bySession.has(p.session_id)) bySession.set(p.session_id, []);
+    bySession.get(p.session_id).push(p);
+  }
+  return papers.map((p) => {
+    const siblings = bySession.get(p.session_id);
+    const i = siblings.indexOf(p);
+    return {
+      params: { id: p.id },
+      props: { p, prev: siblings[i - 1] ?? null, next: siblings[i + 1] ?? null, note: notes.get(p.id) ?? null },
+    };
+  });
+}
+
+const { p, prev, next, note } = Astro.props;
+const Content = note ? (await render(note)).Content : null;
+const hasText = Boolean(note?.body?.trim());
+const affs = [...new Set(p.affiliations.filter(Boolean))];
+const listUrl = (params) => url(`index.html#${new URLSearchParams(params)}`);
+const DATE = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 Sep" };
+---
+<Base title={`${p.title} — IROS 2026`} description={`IROS 2026 paper #${p.id}: ${p.title}`}>
+  <main class="paper-page">
+    <p class="crumbs"><a href={url("index.html")}>← All papers</a></p>
+    <article>
+      <h1>{p.title}</h1>
+      <p class="badges">
+        {p.relevant && <span class="badge">calib &amp; state est.</span>}
+        {p.session_type === "Award Candidates" && <span class="badge award">award candidate</span>}
+        <button type="button" class="star-btn inline" data-star={p.id} aria-pressed="false">☆ Bookmark</button>
+      </p>
+      <p class="authors">{p.authors.join(", ")}</p>
+      {affs.length > 0 && <p class="affs">{affs.join(" · ")}</p>}
+      <dl class="facts">
+        <dt>When</dt><dd>{DATE[p.day]}, {p.time}</dd>
+        <dt>Room</dt><dd>{p.room}</dd>
+        <dt>Session</dt><dd><a href={listUrl({ session: p.session_id })}>{p.session}</a> · {p.session_type}</dd>
+        <dt>Code</dt><dd>{p.code}</dd>
+        <dt>Keywords</dt><dd class="kw">{p.keywords.map((k) => <a href={listUrl({ kw: k })}>{k}</a>)}</dd>
+      </dl>
+      {note && (
+        <section class="notes">
+          <h2>Poster notes</h2>
+          {hasText && Content && <div class="note-text"><Content /></div>}
+          {note.data.photos.length > 0 && (
+            <div class="note-photos">
+              {note.data.photos.map((ph) => (
+                <a href={url(ph.src)} target="_blank" rel="noopener">
+                  <img src={url(ph.thumb)} alt={`Poster photo: ${p.title}`} loading="lazy" />
+                </a>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+      <nav class="session-nav" aria-label="Same session">
+        {prev ? <a href={url(`paper/${prev.id}.html`)}>← {prev.time} {prev.title}</a> : <span />}
+        {next ? <a href={url(`paper/${next.id}.html`)}>{next.time} {next.title} →</a> : <span />}
+      </nav>
+      <div id="comments-slot"></div>
+    </article>
+  </main>
+  <script>
+    import { KEYS, loadSet, saveSet } from "../../lib/stars.js";
+
+    const btn = document.querySelector("[data-star]");
+    const stars = loadSet(KEYS.papers);
+    const paint = () => {
+      const on = stars.has(btn.dataset.star);
+      btn.setAttribute("aria-pressed", String(on));
+      btn.textContent = on ? "★ Bookmarked" : "☆ Bookmark";
+    };
+    paint();
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.star;
+      stars.has(id) ? stars.delete(id) : stars.add(id);
+      saveSet(KEYS.papers, stars);
+      paint();
+    });
+  </script>
+</Base>
