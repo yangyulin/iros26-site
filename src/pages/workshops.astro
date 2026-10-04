@@ -1,0 +1,40 @@
+---
+import Base from "../layouts/Base.astro";
+import workshops from "../../data/workshops.json";
+---
+<Base title="IROS 2026 Workshops" active="workshops">
+  <main class="layout">
+    <aside class="filters" aria-label="Filters">
+      <label class="field">
+        <span>Search</span>
+        <input id="q" type="search" placeholder="title or room…" autocomplete="off" />
+      </label>
+      <fieldset class="field">
+        <legend>Day</legend>
+        <div id="days" class="chips"></div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Time</legend>
+        <div id="slots" class="chips"></div>
+      </fieldset>
+      <label class="field">
+        <span>Type</span>
+        <select id="type"><option value="">Workshops &amp; tutorials</option></select>
+      </label>
+      <div class="field toggles">
+        <label><input id="rel" type="checkbox" /> Calibration &amp; state estimation only</label>
+        <label><input id="star" type="checkbox" /> Bookmarked only <span id="star-count" class="muted"></span></label>
+      </div>
+      <button id="reset" type="button" class="link-btn">Clear all filters</button>
+      <p class="muted small">Organizers and workshop websites are not in the program data yet; “Find website” runs a web search for the title.</p>
+    </aside>
+    <section class="results" aria-live="polite">
+      <p id="summary" class="summary">Loading workshops…</p>
+      <div id="list"></div>
+    </section>
+  </main>
+  <script type="application/json" id="workshops-data" set:html={JSON.stringify(workshops)} />
+  <script>
+    import "../scripts/workshops-page.js";
+  </script>
+</Base>
