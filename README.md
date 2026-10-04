@@ -25,8 +25,8 @@ Notes:
 - The workshop data has no organizers or external URLs yet.
 - The schedule was extracted from a grid by a model. The Wednesday 08:30 talk blocks it produced are dropped in
   `build_data.py` (no paper starts before 09:00 on any day), leaving 65 blocks.
-- Papers have no abstracts. `relevant` = regex match on calibration / VIO / SLAM / state-estimation terms
-  (see `RELEVANT` in the build script).
+- Papers have no abstracts. `relevant` = the "Calibration & state estimation" topic tag: title terms plus
+  RAS keywords (see `is_topic` in the build script).
 
 - `raw/papers_gisbi-kim.json` is not in this repo (upstream has no license); fetch it from
   gisbi-kim/iros2026-explorer to re-run the build. Program data © IEEE/IROS 2026 organizers;
@@ -34,7 +34,9 @@ Notes:
 
 ## Poster notes
 
-Photos from the Drive folder `Iros2026` → `photos/raw/` (gitignored, via `rclone copy gdrive: photos/raw --drive-root-folder-id <folder id>`).
+Photos from the Drive folder `Iros2026` → `photos/raw/` (gitignored):
+`rclone copy gdrive: photos/raw --drive-root-folder-id 1QHz3YEL6BsmDEKlM82UozbciHg7Y77G_`.
 `photos/matches.json` maps each photo to a paper id, with crop/blur boxes that remove bystanders' faces.
-`python3 scripts/add_photos.py` writes EXIF-free WebP (1600px + 480px thumb) to `notes/<paper id>/` and merges
-them into `data/notes.json`. Add your own text under `"text"` for a paper in `data/notes.json` (blank line = new paragraph).
+`python3 scripts/add_photos.py` writes EXIF-free WebP (1600 px + 480 px thumb) to `public/notes/<paper id>/`
+and the photo list into `src/content/notes/<paper id>.md`. Write your note as the Markdown body of that file;
+re-running the script never touches the body.

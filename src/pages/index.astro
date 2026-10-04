@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
+import { noteIndex } from "../lib/notes.js";
+const notes = await noteIndex();
 ---
 <Base title="IROS 2026 Papers" active="papers">
-  <main class="layout"><p class="summary">Astro scaffold.</p></main>
+  <main class="layout"><p class="summary">{Object.keys(notes).length} papers with notes.</p></main>
 </Base>
