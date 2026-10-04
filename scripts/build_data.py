@@ -31,6 +31,23 @@ def is_topic(title, keywords):
     return bool(TOPIC_TITLE.search(title)) or any(k in TOPIC_KEYWORDS or "SLAM" in k for k in keywords)
 
 
+# Finer topic tags (title + keywords) for browsing and for picking papers to read in full.
+TOPICS = {
+    "slam": re.compile(r"\bSLAM\b", re.I),
+    "inertial": re.compile(r"inertial|\bIMU\b|\bVIO\b|\bVINS\b", re.I),
+    "semantic": re.compile(r"semantic", re.I),
+    "localization": re.compile(r"locali[sz]ation|relocali[sz]", re.I),
+    "mapping": re.compile(r"\bmapping\b|\bmaps?\b", re.I),
+    "feed-forward": re.compile(r"feed[- ]?forward|transformer", re.I),
+    "calibration": re.compile(r"(?<!confidence )(?<!uncertainty )calibrat(?!ion[- ]free)", re.I),
+}
+
+
+def topics_of(title, keywords):
+    text = " | ".join([title, *keywords])
+    return [name for name, rx in TOPICS.items() if rx.search(text)]
+
+
 def read_jsonl(path):
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
 
@@ -61,6 +78,7 @@ def build_papers():
             "time": p["time"].zfill(5),  # '9:00' -> '09:00' so times sort as strings
             "room": p["room"],
             "relevant": is_topic(p["title"], p["keywords"]),
+            "topics": topics_of(p["title"], p["keywords"]),
         })
     papers.sort(key=lambda p: (p["date"], p["time"], p["room"], p["id"]))
     return papers

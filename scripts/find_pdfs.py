@@ -106,16 +106,25 @@ def main():
     papers = json.loads((ROOT / "data" / "papers.json").read_text())
     cache = json.loads(CACHE.read_text()) if CACHE.exists() else {}
     stages = [("openalex", openalex, 0.15)] if OPENALEX_KEY else []
-    for stage, fn, pause in stages + [("arxiv", arxiv, 3.1)]:
+    for stage, fn, pause in stages + [("arxiv", arxiv, 4.0)]:
         todo = [p for p in papers if stage not in cache.get(p["id"], {}) and not any(
             cache.get(p["id"], {}).get(s) for s in ("openalex", "arxiv"))]
         print(f"{stage}: {len(todo)} papers to look up")
+        strikes = 0
         for n, p in enumerate(todo, 1):
             try:
                 cache.setdefault(p["id"], {})[stage] = fn(p)
+                strikes = 0
             except RateLimited as e:
-                print(f"  {stage}: rate-limited by {e}; stopping this stage (re-run later to resume)")
-                break
+                # OpenAlex without budget won't recover today; arXiv recovers after a pause.
+                strikes += 1
+                if stage == "openalex" or strikes > 5:
+                    print(f"  {stage}: rate-limited by {e}; stopping this stage (re-run later to resume)")
+                    break
+                print(f"  {stage}: rate-limited by {e}; pausing {120 * strikes} s")
+                CACHE.write_text(json.dumps(cache))
+                time.sleep(120 * strikes)
+                continue
             except Exception as e:  # leave uncached so a re-run retries it
                 print(f"  {p['id']}: {stage} failed ({e})")
             time.sleep(pause)

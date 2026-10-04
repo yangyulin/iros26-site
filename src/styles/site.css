@@ -305,3 +305,12 @@ nav { align-items: center; }
 :root[data-theme="dark"] .pdf-btn { color: #0f172a; }
 .pdf-btn:hover { background: var(--accent-strong); }
 :root[data-theme="dark"] .pdf-btn:hover { color: #0f172a; }
+
+/* Topic chips (calibration, SLAM, ...) */
+.kw button.topic { background: var(--rel-soft); color: var(--rel); font-weight: 600; }
+.facts .kw a.topic { background: var(--rel-soft); color: var(--rel); font-weight: 600; }
+.iv-btn {
+  padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--text);
+  font-size: 14px; font-weight: 600; text-decoration: none;
+}
+.iv-btn:hover { border-color: var(--accent); color: var(--accent); }

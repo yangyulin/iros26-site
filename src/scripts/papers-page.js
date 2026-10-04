@@ -1,14 +1,18 @@
 // Papers page: wires the filter controls to src/lib/query.js and renders the result list.
-import { DAYS, dayCounts, emptyState, esc, filterPapers, haystack, highlight, parseHash, terms, toHash } from "../lib/query.js";
+import { DAYS, TOPICS, dayCounts, emptyState, esc, filterPapers, haystack, highlight, parseHash, terms, toHash } from "../lib/query.js";
 import { KEYS, loadSet, saveSet } from "../lib/stars.js";
 import { url } from "../lib/url.js";
 
 const PAGE = 150;
+const TOPIC_LABEL = {
+  slam: "SLAM", inertial: "Inertial", semantic: "Semantic", localization: "Localization",
+  mapping: "Mapping", "feed-forward": "Feed-forward / transformer", calibration: "Calibration",
+};
 const DAY_LABEL = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 Sep" };
 
 const $ = (id) => document.getElementById(id);
 const els = {
-  q: $("q"), days: $("days"), type: $("type"), session: $("session"), kw: $("kw"), rel: $("rel"),
+  q: $("q"), days: $("days"), type: $("type"), session: $("session"), kw: $("kw"), topic: $("topic"), rel: $("rel"),
   noted: $("noted"), notedCount: $("noted-count"), star: $("star"), starCount: $("star-count"),
   sort: $("sort"), reset: $("reset"), summary: $("summary"), list: $("list"), more: $("more"),
 };
@@ -54,7 +58,7 @@ function paperHtml(p, ts) {
         <button type="button" data-session="${esc(p.session_id)}">${highlight(p.session, ts)}</button>
         · ${esc(p.session_type)} · ${esc(p.code)}${p.pdf ? ` · <a class="pdf-link" href="${esc(p.pdf)}" target="_blank" rel="noopener">PDF</a>` : ""}
       </div>
-      <div class="kw">${p.keywords.map((k) => `<button type="button" data-kw="${esc(k)}">${highlight(k, ts)}</button>`).join("")}</div>
+      <div class="kw">${(p.topics || []).map((t) => `<button type="button" class="topic" data-topic="${t}">${TOPIC_LABEL[t]}</button>`).join("")}${p.keywords.map((k) => `<button type="button" data-kw="${esc(k)}">${highlight(k, ts)}</button>`).join("")}</div>
     </div>
     <button type="button" class="star-btn" data-star="${esc(p.id)}" aria-pressed="${starred}"
       aria-label="${starred ? "Remove bookmark" : "Bookmark"}">${starred ? "★" : "☆"}</button>
@@ -100,6 +104,7 @@ function syncControls() {
   els.type.value = state.type;
   els.session.value = state.session;
   els.kw.value = state.kw;
+  els.topic.value = state.topic;
   els.rel.checked = state.rel;
   els.noted.checked = state.noted;
   els.star.checked = state.star;
@@ -134,6 +139,11 @@ function fillSelects() {
     els.session.appendChild(group);
   }
 
+  for (const t of TOPICS) {
+    const n = papers.filter((p) => (p.topics || []).includes(t)).length;
+    els.topic.add(new Option(`${TOPIC_LABEL[t]} (${n})`, t));
+  }
+
   const kws = new Map();
   for (const p of papers) for (const k of p.keywords) kws.set(k, (kws.get(k) || 0) + 1);
   [...kws].sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, n]) => els.kw.add(new Option(`${k} (${n})`, k)));
@@ -145,7 +155,7 @@ function bind() {
     clearTimeout(timer);
     timer = setTimeout(() => { state.q = els.q.value.trim(); update(); }, 120);
   });
-  for (const k of ["type", "session", "kw", "sort"]) {
+  for (const k of ["type", "session", "kw", "topic", "sort"]) {
     els[k].addEventListener("change", () => { state[k] = els[k].value; update(); });
   }
   for (const k of ["rel", "noted", "star"]) {
@@ -177,9 +187,10 @@ function bind() {
       b.setAttribute("aria-label", on ? "Remove bookmark" : "Bookmark");
       b.textContent = on ? "★" : "☆";
       els.starCount.textContent = ctx.stars.size ? `(${ctx.stars.size})` : "";
-    } else if (b.dataset.session || b.dataset.kw) {
+    } else if (b.dataset.session || b.dataset.kw || b.dataset.topic) {
       if (b.dataset.session) state.session = b.dataset.session;
-      else state.kw = b.dataset.kw;
+      else if (b.dataset.kw) state.kw = b.dataset.kw;
+      else state.topic = b.dataset.topic;
       syncControls();
       update();
       window.scrollTo({ top: 0 });

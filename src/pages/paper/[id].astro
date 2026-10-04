@@ -5,6 +5,7 @@ import { render } from "astro:content";
 import papers from "../../../data/papers.json";
 import { loadNotes } from "../../lib/notes.js";
 import { pdfs } from "../../lib/pdfs.js";
+import { infovaya, infovayaUrl } from "../../lib/infovaya.js";
 import { url } from "../../lib/url.js";
 
 export async function getStaticPaths() {
@@ -31,6 +32,11 @@ const affs = [...new Set(p.affiliations.filter(Boolean))];
 const listUrl = (params) => url(`index.html#${new URLSearchParams(params)}`);
 const DATE = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 Sep" };
 const pdf = pdfs[p.id] ?? null;
+const ivId = infovaya[p.id] ?? null;
+const TOPIC_LABEL = {
+  slam: "SLAM", inertial: "Inertial", semantic: "Semantic", localization: "Localization",
+  mapping: "Mapping", "feed-forward": "Feed-forward / transformer", calibration: "Calibration",
+};
 ---
 <Base title={`${p.title} — IROS 2026`} description={`IROS 2026 paper #${p.id}: ${p.title}`}>
   <main class="paper-page">
@@ -46,6 +52,11 @@ const pdf = pdfs[p.id] ?? null;
             PDF{pdf.source === "arxiv" ? " (arXiv)" : ""} ↗
           </a>
         )}
+        {ivId && (
+          <a class="iv-btn" href={infovayaUrl(ivId)} target="_blank" rel="noopener" title="IROS attendee login required">
+            Infovaya ↗
+          </a>
+        )}
       </p>
       <p class="authors">{p.authors.join(", ")}</p>
       {affs.length > 0 && <p class="affs">{affs.join(" · ")}</p>}
@@ -54,6 +65,12 @@ const pdf = pdfs[p.id] ?? null;
         <dt>Room</dt><dd>{p.room}</dd>
         <dt>Session</dt><dd><a href={listUrl({ session: p.session_id })}>{p.session}</a> · {p.session_type}</dd>
         <dt>Code</dt><dd>{p.code}</dd>
+        {p.topics.length > 0 && (
+          <>
+            <dt>Topics</dt>
+            <dd class="kw">{p.topics.map((t) => <a class="topic" href={listUrl({ topic: t })}>{TOPIC_LABEL[t]}</a>)}</dd>
+          </>
+        )}
         <dt>Keywords</dt><dd class="kw">{p.keywords.map((k) => <a href={listUrl({ kw: k })}>{k}</a>)}</dd>
       </dl>
       {note && (

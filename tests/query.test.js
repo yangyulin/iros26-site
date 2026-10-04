@@ -3,10 +3,10 @@ import { dayCounts, emptyState, filterPapers, highlight, parseHash, toHash } fro
 
 const P = (o) => ({
   id: "1", code: "W1 · #1", title: "T", authors: [], affiliations: [], keywords: [], session_id: "s",
-  session: "S", session_type: "Lightning Talks", day: "Monday", time: "09:00", room: "301", relevant: false, ...o,
+  session: "S", session_type: "Lightning Talks", day: "Monday", time: "09:00", room: "301", relevant: false, topics: [], ...o,
 });
 const papers = [
-  P({ id: "1", title: "Visual-Inertial Odometry", day: "Monday", relevant: true, keywords: ["SLAM"] }),
+  P({ id: "1", title: "Visual-Inertial Odometry", day: "Monday", relevant: true, keywords: ["SLAM"], topics: ["slam", "inertial"] }),
   P({ id: "2", title: "Grasping Soft Objects", day: "Tuesday", authors: ["Huang, Guoquan"], session_type: "Focused Sessions" }),
   P({ id: "3", title: "Calibration & Identification of Arms", day: "Wednesday", keywords: ["Calibration and Identification"], relevant: true }),
 ];
@@ -18,7 +18,7 @@ describe("hash state", () => {
   it("round-trips every field, including & + and spaces in values", () => {
     const st = state({
       q: "a&b c+d", days: new Set(["Monday", "Wednesday"]), type: "Focused Sessions", session: "383c1d",
-      kw: "Calibration and Identification", rel: true, star: true, noted: true, sort: "title",
+      kw: "Calibration and Identification", topic: "feed-forward", rel: true, star: true, noted: true, sort: "title",
     });
     expect(plain(parseHash("#" + toHash(st)))).toEqual(plain(st));
   });
@@ -27,7 +27,8 @@ describe("hash state", () => {
     expect(plain(st)).toEqual(plain(state({ q: "calibration", rel: true, days: new Set(["Tuesday"]), kw: "Sensor Fusion", noted: true })));
   });
   it("drops unknown days and junk values", () => {
-    const st = parseHash("#day=Funday,Monday&sort=bogus&rel=yes");
+    const st = parseHash("#day=Funday,Monday&sort=bogus&rel=yes&topic=astrology");
+    expect(st.topic).toBe("");
     expect([...st.days]).toEqual(["Monday"]);
     expect(st.sort).toBe("time");
     expect(st.rel).toBe(false);
@@ -48,6 +49,7 @@ describe("filterPapers", () => {
     expect(ids({ rel: true })).toEqual(["1", "3"]);
     expect(ids({ star: true })).toEqual(["2"]);
     expect(ids({ noted: true })).toEqual(["3"]);
+    expect(ids({ topic: "inertial" })).toEqual(["1"]);
   });
   it("sorts by title on request, keeps data order otherwise", () => {
     expect(ids({ sort: "title" })).toEqual(["3", "2", "1"]);

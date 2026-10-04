@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from build_data import is_topic  # noqa: E402
+from build_data import is_topic, topics_of  # noqa: E402
 
 
 class TopicTag(unittest.TestCase):
@@ -34,6 +34,20 @@ class TopicTag(unittest.TestCase):
             ("Sound Source Localization with a Microphone Array", ["Robot Audition"]),
         ]:
             self.assertFalse(is_topic(title, keywords), title)
+
+
+class Topics(unittest.TestCase):
+    def test_tags_from_title_and_keywords(self):
+        self.assertEqual(topics_of("Tightly Coupled LiDAR-Inertial Odometry", ["SLAM"]), ["slam", "inertial"])
+        self.assertEqual(topics_of("Open-Vocabulary 3D Semantic Mapping", []), ["semantic", "mapping"])
+        self.assertEqual(topics_of("Monte Carlo Localization in Prior Maps", []), ["localization", "mapping"])
+        self.assertEqual(topics_of("StereoSplat+: Feed-Forward Stereo Gaussian Splatting", []), ["feed-forward"])
+        self.assertEqual(topics_of("A Transformer for Place Recognition", []), ["feed-forward"])
+        self.assertEqual(topics_of("Some Title", ["Calibration and Identification"]), ["calibration"])
+
+    def test_no_false_hits(self):
+        self.assertEqual(topics_of("Confidence Calibration for Safety Prediction", ["Robot Safety"]), [])
+        self.assertEqual(topics_of("Grasping Soft Objects", ["Grasping"]), [])
 
 
 if __name__ == "__main__":

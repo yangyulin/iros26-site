@@ -1,8 +1,9 @@
 // Pure paper-query logic for the papers page: state, URL hash, matching, highlighting.
 export const DAYS = ["Monday", "Tuesday", "Wednesday"];
+export const TOPICS = ["slam", "inertial", "semantic", "localization", "mapping", "feed-forward", "calibration"];
 
 export function emptyState() {
-  return { q: "", days: new Set(), type: "", session: "", kw: "", rel: false, star: false, noted: false, sort: "time" };
+  return { q: "", days: new Set(), type: "", session: "", kw: "", topic: "", rel: false, star: false, noted: false, sort: "time" };
 }
 
 const ENTITIES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
@@ -27,6 +28,7 @@ export function matchPaper(p, st, ts, ctx, ignoreDay = false) {
   if (st.type && p.session_type !== st.type) return false;
   if (st.session && p.session_id !== st.session) return false;
   if (st.kw && !p.keywords.includes(st.kw)) return false;
+  if (st.topic && !(p.topics || []).includes(st.topic)) return false;
   if (st.rel && !p.relevant) return false;
   if (st.star && !ctx.stars.has(p.id)) return false;
   if (st.noted && !ctx.notes[p.id]) return false;
@@ -52,7 +54,7 @@ export function toHash(st) {
   const h = new URLSearchParams();
   if (st.q) h.set("q", st.q);
   if (st.days.size) h.set("day", [...st.days].join(","));
-  for (const k of ["type", "session", "kw"]) if (st[k]) h.set(k, st[k]);
+  for (const k of ["type", "session", "kw", "topic"]) if (st[k]) h.set(k, st[k]);
   if (st.sort !== "time") h.set("sort", st.sort);
   if (st.rel) h.set("rel", "1");
   if (st.star) h.set("star", "1");
@@ -68,6 +70,7 @@ export function parseHash(hash) {
   st.type = h.get("type") || "";
   st.session = h.get("session") || "";
   st.kw = h.get("kw") || "";
+  st.topic = TOPICS.includes(h.get("topic")) ? h.get("topic") : "";
   st.sort = h.get("sort") === "title" ? "title" : "time";
   st.rel = h.get("rel") === "1";
   st.star = h.get("star") === "1";
