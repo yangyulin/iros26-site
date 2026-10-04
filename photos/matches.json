@@ -2,7 +2,7 @@
   "_comment": "Poster photo -> paper id. Boxes are [x0, y0, x1, y1] in 1600px-preview coordinates (after EXIF rotation). crop keeps the poster; blur hides bystanders' faces. skip = not published.",
   "photos": [
     {"file": "IMG_2787.JPG", "paper": "3549", "crop": [150, 100, 1480, 1190], "blur": [[1130, 480, 1480, 1190]]},
-    {"file": "IMG_2788.JPG", "paper": "3549", "skip": "presenter's face covers the poster; IMG_2787 shows the same poster"},
+    {"file": "IMG_2788.JPG", "paper": "3549", "crop": [300, 320, 1420, 1200], "blur": [[1070, 470, 1600, 1200]]},
     {"file": "IMG_2789.JPG", "paper": "3315"},
     {"file": "IMG_2790.JPG", "paper": "814"},
     {"file": "IMG_2791.JPG", "paper": "6", "crop": [50, 50, 1420, 1200]},
