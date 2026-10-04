@@ -1,11 +1,13 @@
-"""Publish poster photos as per-paper notes.
+"""Publish conference photos as notes on papers, workshops and events.
 
-Reads photos/matches.json (photo -> paper id, optional crop/blur boxes) and the
+Reads photos/matches.json (photo -> paper id, workshop id or event key, optional
+crop/blur boxes; events are defined in its "events" map) and the
 originals in photos/raw/, writes resized, EXIF-free WebP files to
-public/notes/<paper id>/ (480 px thumb, 1600 px display, up to 3000 px zoom
+public/notes/<key>/ (480 px thumb, 1600 px display, up to 3000 px zoom
 for reading poster text in the lightbox) and the photo list, with the zoom
 image's pixel size, into the front matter of
-src/content/notes/<paper id>.md. The note body (your text) is never touched.
+src/content/notes/<key>.md (key = paper id, lowercased workshop id or event key).
+The note body (your text) is never touched.
 
     python3 scripts/add_photos.py
 """
@@ -44,26 +46,46 @@ def note_body(text):
     return text
 
 
-def note_file(pid, photos, body):
-    lines = ["---", f'paper: "{pid}"', "photos:"]
+def note_file(kind, key, title, photos, body):
+    lines = ["---", f'{kind}: "{key}"']
+    if title:
+        lines.append(f'title: "{title}"')
+    lines.append("photos:")
     for ph in photos:
         lines += [f"  - src: {ph['src']}", f"    thumb: {ph['thumb']}", f"    zoom: {ph['zoom']}",
                   f"    width: {ph['width']}", f"    height: {ph['height']}"]
     return "\n".join(lines) + "\n---\n" + body
 
 
+def target(entry, papers, workshops, events):
+    """(kind, id, note key, title) for a matches.json entry; exits on an unknown id."""
+    if "paper" in entry:
+        if entry["paper"] not in papers:
+            raise SystemExit(f"{entry['file']}: unknown paper id {entry['paper']}")
+        return "paper", entry["paper"], entry["paper"], None
+    if "workshop" in entry:
+        if entry["workshop"] not in workshops:
+            raise SystemExit(f"{entry['file']}: unknown workshop id {entry['workshop']}")
+        return "workshop", entry["workshop"], entry["workshop"].lower(), None
+    if entry.get("event") in events:
+        return "event", entry["event"], entry["event"], events[entry["event"]]
+    raise SystemExit(f"{entry['file']}: needs a known paper, workshop or event (events are listed in matches.json)")
+
+
 def run(root):
     root = Path(root)
     papers = {p["id"] for p in json.loads((root / "data" / "papers.json").read_text())}
-    photos_by_paper = {}
-    for entry in json.loads((root / "photos" / "matches.json").read_text())["photos"]:
+    ws_path = root / "data" / "workshops.json"
+    workshops = {w["id"] for w in json.loads(ws_path.read_text())} if ws_path.exists() else set()
+    matches = json.loads((root / "photos" / "matches.json").read_text())
+    events = matches.get("events", {})
+    notes = {}  # note key -> {kind, id, title, photos}
+    for entry in matches["photos"]:
         if "skip" in entry:
             print(f"skip {entry['file']}: {entry['skip']}")
             continue
-        pid = entry["paper"]
-        if pid not in papers:
-            raise SystemExit(f"{entry['file']}: unknown paper id {pid}")
-        out = root / "public" / "notes" / pid
+        kind, iid, key, title = target(entry, papers, workshops, events)
+        out = root / "public" / "notes" / key
         out.mkdir(parents=True, exist_ok=True)
         stem = Path(entry["file"]).stem.lower()
         im = clean_image(root / "photos" / "raw" / entry["file"], entry)
@@ -74,20 +96,21 @@ def run(root):
             copy.thumbnail((size, size))
             copy.save(out / name, "WEBP", quality=quality)
             sizes[size] = copy.size
-        photos_by_paper.setdefault(pid, []).append({
-            "src": f"notes/{pid}/{stem}.webp", "thumb": f"notes/{pid}/{stem}-thumb.webp",
-            "zoom": f"notes/{pid}/{stem}-zoom.webp", "width": sizes[ZOOM][0], "height": sizes[ZOOM][1],
+        note = notes.setdefault(key, {"kind": kind, "id": iid, "title": title, "photos": []})
+        note["photos"].append({
+            "src": f"notes/{key}/{stem}.webp", "thumb": f"notes/{key}/{stem}-thumb.webp",
+            "zoom": f"notes/{key}/{stem}-zoom.webp", "width": sizes[ZOOM][0], "height": sizes[ZOOM][1],
         })
-        print(f"{entry['file']} -> public/notes/{pid}/{stem}.webp")
+        print(f"{entry['file']} -> public/notes/{key}/{stem}.webp")
 
     notes_dir = root / "src" / "content" / "notes"
     notes_dir.mkdir(parents=True, exist_ok=True)
-    for pid, photos in photos_by_paper.items():
-        path = notes_dir / f"{pid}.md"
+    for key, n in notes.items():
+        path = notes_dir / f"{key}.md"
         body = note_body(path.read_text()) if path.exists() else "\n"
-        path.write_text(note_file(pid, photos, body))
-    print(f"{len(photos_by_paper)} papers with photos -> src/content/notes/")
-    return photos_by_paper
+        path.write_text(note_file(n["kind"], n["id"], n["title"], n["photos"], body))
+    print(f"{len(notes)} notes (papers, workshops, events) -> src/content/notes/")
+    return {k: n["photos"] for k, n in notes.items()}
 
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import workshops from "../../data/workshops.json";
+import { loadAllNotes } from "../lib/notes.js";
+
+const wsPhotos = Object.fromEntries([...(await loadAllNotes()).workshops].map(([id, e]) => [id, e.data.photos.length]));
 ---
 <Base title="IROS 2026 Workshops" active="workshops">
   <main class="layout">
@@ -34,6 +37,7 @@ import workshops from "../../data/workshops.json";
     </section>
   </main>
   <script type="application/json" id="workshops-data" set:html={JSON.stringify(workshops)} />
+  <script type="application/json" id="workshop-photos" set:html={JSON.stringify(wsPhotos)} />
   <script>
     import "../scripts/workshops-page.js";
   </script>

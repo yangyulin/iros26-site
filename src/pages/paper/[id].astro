@@ -7,6 +7,7 @@ import { loadNotes } from "../../lib/notes.js";
 import { pdfs } from "../../lib/pdfs.js";
 import { infovaya, infovayaUrl } from "../../lib/infovaya.js";
 import { url } from "../../lib/url.js";
+import { paperCaption } from "../../lib/captions.js";
 
 export async function getStaticPaths() {
   const notes = await loadNotes();
@@ -75,10 +76,10 @@ const TOPIC_LABEL = {
       </dl>
       {note && (
         <section class="notes">
-          <h2>Poster notes</h2>
+          <h2>My photos &amp; notes</h2>
           {hasText && Content && <div class="note-text"><Content /></div>}
           {note.data.photos.length > 0 && (
-            <PosterGallery layout="stack" items={note.data.photos.map((photo) => ({ photo, paper: p }))} />
+            <PosterGallery layout="stack" items={note.data.photos.map((photo) => ({ photo, caption: paperCaption(p) }))} />
           )}
         </section>
       )}

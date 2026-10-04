@@ -1,5 +1,6 @@
 // Workshops page: filters from src/lib/workshops.js over the data inlined by workshops.astro.
 import { esc, highlight, terms } from "../lib/query.js";
+import { url } from "../lib/url.js";
 import { KEYS, loadSet, saveSet } from "../lib/stars.js";
 import { emptyWsState, matchWorkshop, slotOf, wsParseHash, wsToHash } from "../lib/workshops.js";
 
@@ -14,6 +15,7 @@ const els = {
   starCount: $("star-count"), reset: $("reset"), summary: $("summary"), list: $("list"),
 };
 const items = JSON.parse($("workshops-data").textContent);
+const photos = JSON.parse($("workshop-photos")?.textContent || "{}");
 const stars = loadSet(KEYS.workshops);
 let state = wsParseHash(location.hash);
 
@@ -30,7 +32,7 @@ function card(w, ts) {
   return `<article class="paper ws${w.relevant ? " is-rel" : ""}">
     <div class="when"><b>${w.start}–${w.end}</b>Rm ${highlight(w.room, ts)}</div>
     <div>
-      <h3>${highlight(w.title, ts)}${w.relevant ? `<span class="badge">calib &amp; state est.</span>` : ""}${w.type === "tutorial" ? `<span class="badge award">tutorial</span>` : ""}</h3>
+      <h3>${highlight(w.title, ts)}${w.relevant ? `<span class="badge">calib &amp; state est.</span>` : ""}${w.type === "tutorial" ? `<span class="badge award">tutorial</span>` : ""}${photos[w.id] ? `<a class="badge award" href="${url(`posters.html#${w.id.toLowerCase()}`)}">${photos[w.id]} photo${photos[w.id] > 1 ? "s" : ""}</a>` : ""}</h3>
       <div class="meta">${DAY_LABEL[w.day]} · ${esc(w.length)} · <a href="${search}" target="_blank" rel="noopener">Find website</a></div>
     </div>
     <button type="button" class="star-btn" data-star="${esc(w.id)}" aria-pressed="${starred}"

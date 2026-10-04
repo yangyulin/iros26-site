@@ -1,19 +1,1097 @@
 {
-  "_comment": "Poster photo -> paper id. Boxes are [x0, y0, x1, y1] in 1600px-preview coordinates (after EXIF rotation). crop keeps the poster; blur hides bystanders' faces. skip = not published.",
-  "photos": [
-    {"file": "IMG_2787.JPG", "paper": "3549", "crop": [150, 100, 1480, 1190], "blur": [[1130, 480, 1480, 1190]]},
-    {"file": "IMG_2788.JPG", "paper": "3549", "crop": [300, 320, 1420, 1200], "blur": [[1070, 470, 1600, 1200]]},
-    {"file": "IMG_2789.JPG", "paper": "3315"},
-    {"file": "IMG_2790.JPG", "paper": "814"},
-    {"file": "IMG_2791.JPG", "paper": "6", "crop": [50, 50, 1420, 1200]},
-    {"file": "IMG_2792.JPG", "paper": "968"},
-    {"file": "IMG_2793.JPG", "paper": "3228", "crop": [300, 90, 1180, 1200]},
-    {"file": "IMG_2794.JPG", "paper": "3998", "crop": [40, 240, 1150, 1600]},
-    {"file": "IMG_2795.JPG", "paper": "2400"},
-    {"file": "IMG_2796.JPG", "paper": "5006"},
-    {"file": "IMG_2797.JPG", "paper": "5012", "crop": [140, 80, 1520, 1130], "blur": [[1300, 600, 1520, 1130]]},
-    {"file": "IMG_2798.JPG", "paper": "3784"},
-    {"file": "IMG_2799.JPG", "paper": "3520", "crop": [110, 0, 1330, 1200]},
-    {"file": "IMG_2800.JPG", "paper": "3172", "crop": [80, 30, 1300, 1200]}
-  ]
+ "_comment": "Photo -> paper id, workshop id (W..) or event key (see events). Boxes are [x0, y0, x1, y1] in 1600px-preview coordinates (after EXIF rotation). crop keeps the subject; blur hides people (faces + upper bodies from scripts/vision_scan.swift, plus manual boxes). skip = not published.",
+ "events": {
+  "welcome-ceremony": "Welcome Ceremony \u00b7 Mon 28 Sep",
+  "other-posters": "Other posters (not in the IROS paper index)"
+ },
+ "photos": [
+  {
+   "file": "IMG_2787.JPG",
+   "paper": "3549",
+   "crop": [
+    150,
+    100,
+    1480,
+    1190
+   ],
+   "blur": [
+    [
+     1130,
+     480,
+     1480,
+     1190
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2788.JPG",
+   "paper": "3549",
+   "crop": [
+    300,
+    320,
+    1420,
+    1200
+   ],
+   "blur": [
+    [
+     1070,
+     470,
+     1600,
+     1200
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2789.JPG",
+   "paper": "3315"
+  },
+  {
+   "file": "IMG_2790.JPG",
+   "paper": "814"
+  },
+  {
+   "file": "IMG_2791.JPG",
+   "paper": "6",
+   "crop": [
+    50,
+    50,
+    1420,
+    1200
+   ]
+  },
+  {
+   "file": "IMG_2792.JPG",
+   "paper": "968"
+  },
+  {
+   "file": "IMG_2793.JPG",
+   "paper": "3228",
+   "crop": [
+    300,
+    90,
+    1180,
+    1200
+   ]
+  },
+  {
+   "file": "IMG_2794.JPG",
+   "paper": "3998",
+   "crop": [
+    40,
+    240,
+    1150,
+    1600
+   ]
+  },
+  {
+   "file": "IMG_2795.JPG",
+   "paper": "2400"
+  },
+  {
+   "file": "IMG_2796.JPG",
+   "paper": "5006"
+  },
+  {
+   "file": "IMG_2797.JPG",
+   "paper": "5012",
+   "crop": [
+    140,
+    80,
+    1520,
+    1130
+   ],
+   "blur": [
+    [
+     1300,
+     600,
+     1520,
+     1130
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2798.JPG",
+   "paper": "3784"
+  },
+  {
+   "file": "IMG_2799.JPG",
+   "paper": "3520",
+   "crop": [
+    110,
+    0,
+    1330,
+    1200
+   ]
+  },
+  {
+   "file": "IMG_2800.JPG",
+   "paper": "3172",
+   "crop": [
+    80,
+    30,
+    1300,
+    1200
+   ]
+  },
+  {
+   "file": "IMG_2470.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2471.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     324,
+     1600,
+     458
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2472.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     184,
+     1600,
+     321
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2473.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     0,
+     1600,
+     92
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2474.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     54,
+     1600,
+     197
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2475.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     101,
+     1600,
+     246
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2476.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     138,
+     1600,
+     276
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2477.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     184,
+     1600,
+     318
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2478.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     119,
+     1600,
+     267
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2479.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     119,
+     1600,
+     263
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2480.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     0,
+     1600,
+     78
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2481.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     0,
+     1600,
+     67
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2482.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     0,
+     1600,
+     39
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2483.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     8,
+     1600,
+     150
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2484.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     61,
+     1600,
+     195
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2485.JPG",
+   "workshop": "W04",
+   "blur": [
+    [
+     0,
+     61,
+     1600,
+     206
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2486.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2487.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2488.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2491.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2492.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2493.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2494.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2495.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2496.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2497.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2498.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2499.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2501.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2502.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2503.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2504.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2505.JPG",
+   "workshop": "W04"
+  },
+  {
+   "file": "IMG_2507.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2508.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2509.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2510.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2511.JPG",
+   "workshop": "W14",
+   "blur": [
+    [
+     49,
+     414,
+     125,
+     482
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2512.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2513.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2514.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2515.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2516.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2517.JPG",
+   "workshop": "W14"
+  },
+  {
+   "file": "IMG_2518.JPG",
+   "workshop": "W29"
+  },
+  {
+   "file": "IMG_2519.JPG",
+   "workshop": "W33"
+  },
+  {
+   "file": "IMG_2555.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2556.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2557.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2558.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2559.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2560.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2561.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2562.JPG",
+   "event": "welcome-ceremony"
+  },
+  {
+   "file": "IMG_2565.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2567.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2568.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2569.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2570.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2571.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2572.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2573.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2574.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2576.JPG",
+   "paper": "831",
+   "blur": [
+    [
+     0,
+     262,
+     187,
+     510
+    ],
+    [
+     0,
+     175,
+     238,
+     606
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2577.JPG",
+   "paper": "831"
+  },
+  {
+   "file": "IMG_2578.JPG",
+   "paper": "831",
+   "blur": [
+    [
+     357,
+     416,
+     518,
+     577
+    ],
+    [
+     221,
+     341,
+     563,
+     625
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2579.JPG",
+   "paper": "3831"
+  },
+  {
+   "file": "IMG_2580.JPG",
+   "paper": "1324"
+  },
+  {
+   "file": "IMG_2581.JPG",
+   "paper": "1324"
+  },
+  {
+   "file": "IMG_2582.JPG",
+   "paper": "1006",
+   "blur": [
+    [
+     1206,
+     873,
+     1404,
+     1070
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2583.JPG",
+   "paper": "1006",
+   "blur": [
+    [
+     1205,
+     902,
+     1378,
+     1076
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2591.JPG",
+   "event": "other-posters"
+  },
+  {
+   "file": "IMG_2592.JPG",
+   "paper": "2437"
+  },
+  {
+   "file": "IMG_2593.JPG",
+   "paper": "831"
+  },
+  {
+   "file": "IMG_2594.JPG",
+   "paper": "1981"
+  },
+  {
+   "file": "IMG_2595.JPG",
+   "paper": "2693",
+   "blur": [
+    [
+     182,
+     628,
+     640,
+     914
+    ],
+    [
+     974,
+     719,
+     1377,
+     959
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2596.JPG",
+   "paper": "2032"
+  },
+  {
+   "file": "IMG_2597.JPG",
+   "paper": "4564"
+  },
+  {
+   "file": "IMG_2598.JPG",
+   "paper": "4285"
+  },
+  {
+   "file": "IMG_2599.JPG",
+   "paper": "2384"
+  },
+  {
+   "file": "IMG_2600.JPG",
+   "paper": "4321"
+  },
+  {
+   "file": "IMG_2601.JPG",
+   "paper": "4321"
+  },
+  {
+   "file": "IMG_2602.JPG",
+   "paper": "3831"
+  },
+  {
+   "file": "IMG_2603.JPG",
+   "paper": "2371"
+  },
+  {
+   "file": "IMG_2604.JPG",
+   "paper": "2371",
+   "blur": [
+    [
+     1025,
+     248,
+     1174,
+     397
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2605.JPG",
+   "paper": "5041"
+  },
+  {
+   "file": "IMG_2606.JPG",
+   "paper": "3941"
+  },
+  {
+   "file": "IMG_2607.JPG",
+   "paper": "4988"
+  },
+  {
+   "file": "IMG_2608.JPG",
+   "paper": "4988"
+  },
+  {
+   "file": "IMG_2609.JPG",
+   "paper": "369",
+   "blur": [
+    [
+     1226,
+     665,
+     1421,
+     859
+    ],
+    [
+     0,
+     514,
+     746,
+     857
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2610.JPG",
+   "paper": "4494"
+  },
+  {
+   "file": "IMG_2611.JPG",
+   "paper": "4494"
+  },
+  {
+   "file": "IMG_2612.JPG",
+   "paper": "4494",
+   "blur": [
+    [
+     480,
+     545,
+     654,
+     718
+    ],
+    [
+     1286,
+     468,
+     1600,
+     834
+    ],
+    [
+     307,
+     476,
+     631,
+     777
+    ],
+    [
+     38,
+     462,
+     97,
+     522
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2619.JPG",
+   "paper": "438"
+  },
+  {
+   "file": "IMG_2620.JPG",
+   "paper": "438"
+  },
+  {
+   "file": "IMG_2621.JPG",
+   "paper": "4128"
+  },
+  {
+   "file": "IMG_2622.JPG",
+   "paper": "4128"
+  },
+  {
+   "file": "IMG_2623.JPG",
+   "paper": "2271"
+  },
+  {
+   "file": "IMG_2624.JPG",
+   "paper": "2271"
+  },
+  {
+   "file": "IMG_2625.JPG",
+   "paper": "2271"
+  },
+  {
+   "file": "IMG_2626.JPG",
+   "paper": "2596"
+  },
+  {
+   "file": "IMG_2627.JPG",
+   "paper": "2596"
+  },
+  {
+   "file": "IMG_2628.JPG",
+   "paper": "2596"
+  },
+  {
+   "file": "IMG_2629.JPG",
+   "paper": "2596"
+  },
+  {
+   "file": "IMG_2630.JPG",
+   "paper": "440"
+  },
+  {
+   "file": "IMG_2631.JPG",
+   "paper": "440"
+  },
+  {
+   "file": "IMG_2632.JPG",
+   "paper": "440"
+  },
+  {
+   "file": "IMG_2633.JPG",
+   "paper": "2978"
+  },
+  {
+   "file": "IMG_2634.JPG",
+   "paper": "2978"
+  },
+  {
+   "file": "IMG_2635.JPG",
+   "paper": "3105"
+  },
+  {
+   "file": "IMG_2636.JPG",
+   "paper": "355"
+  },
+  {
+   "file": "IMG_2637.JPG",
+   "paper": "355"
+  },
+  {
+   "file": "IMG_2638.JPG",
+   "paper": "1227"
+  },
+  {
+   "file": "IMG_2640.JPG",
+   "paper": "5065"
+  },
+  {
+   "file": "IMG_2641.JPG",
+   "paper": "237",
+   "blur": [
+    [
+     1060,
+     769,
+     1295,
+     1003
+    ],
+    [
+     1067,
+     609,
+     1554,
+     904
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2642.JPG",
+   "paper": "237",
+   "blur": [
+    [
+     1110,
+     540,
+     1353,
+     782
+    ],
+    [
+     1118,
+     373,
+     1600,
+     786
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2643.JPG",
+   "paper": "880"
+  },
+  {
+   "file": "IMG_2644.JPG",
+   "paper": "1265"
+  },
+  {
+   "file": "IMG_2646.JPG",
+   "paper": "1878"
+  },
+  {
+   "file": "IMG_2647.JPG",
+   "paper": "2197",
+   "blur": [
+    [
+     1208,
+     640,
+     1511,
+     943
+    ],
+    [
+     1098,
+     562,
+     1465,
+     881
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2648.JPG",
+   "paper": "350"
+  },
+  {
+   "file": "IMG_2649.JPG",
+   "paper": "645",
+   "blur": [
+    [
+     1363,
+     414,
+     1600,
+     782
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2650.JPG",
+   "paper": "2978"
+  },
+  {
+   "file": "IMG_2651.JPG",
+   "paper": "2271"
+  },
+  {
+   "file": "IMG_2652.JPG",
+   "paper": "131"
+  },
+  {
+   "file": "IMG_2653.JPG",
+   "paper": "131"
+  },
+  {
+   "file": "IMG_2664.JPG",
+   "paper": "3220"
+  },
+  {
+   "file": "IMG_2665.JPG",
+   "paper": "4210"
+  },
+  {
+   "file": "IMG_2666.JPG",
+   "paper": "4210"
+  },
+  {
+   "file": "IMG_2667.JPG",
+   "paper": "4210"
+  },
+  {
+   "file": "IMG_2708.JPG",
+   "paper": "2163"
+  },
+  {
+   "file": "IMG_2719.JPG",
+   "skip": "slide shows a speaker's personal phone number and email; session unknown"
+  },
+  {
+   "file": "IMG_2721.JPG",
+   "paper": "4182"
+  },
+  {
+   "file": "IMG_2722.JPG",
+   "paper": "3588"
+  },
+  {
+   "file": "IMG_2723.JPG",
+   "paper": "1966"
+  },
+  {
+   "file": "IMG_2724.JPG",
+   "paper": "3361"
+  },
+  {
+   "file": "IMG_2725.JPG",
+   "event": "other-posters",
+   "blur": [
+    [
+     1340,
+     733,
+     1600,
+     1075
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2726.JPG",
+   "paper": "2209"
+  },
+  {
+   "file": "IMG_2748.JPG",
+   "paper": "3147",
+   "blur": [
+    [
+     596,
+     870,
+     796,
+     1070
+    ],
+    [
+     617,
+     804,
+     990,
+     1002
+    ],
+    [
+     0,
+     583,
+     161,
+     891
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2749.JPG",
+   "paper": "163"
+  },
+  {
+   "file": "IMG_2750.JPG",
+   "paper": "163"
+  },
+  {
+   "file": "IMG_2751.JPG",
+   "paper": "571"
+  },
+  {
+   "file": "IMG_2754.JPG",
+   "paper": "2520"
+  },
+  {
+   "file": "IMG_2755.JPG",
+   "paper": "2428"
+  },
+  {
+   "file": "IMG_2756.JPG",
+   "skip": "crowd of identifiable attendees; IMG_2755 shows the same poster"
+  },
+  {
+   "file": "IMG_2757.JPG",
+   "skip": "crowd of identifiable attendees; IMG_2755 shows the same poster"
+  },
+  {
+   "file": "IMG_2758.JPG",
+   "paper": "4901",
+   "blur": [
+    [
+     0,
+     402,
+     207,
+     678
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2759.JPG",
+   "paper": "4901"
+  },
+  {
+   "file": "IMG_2760.JPG",
+   "paper": "4268"
+  },
+  {
+   "file": "IMG_2765.JPG",
+   "paper": "984"
+  },
+  {
+   "file": "IMG_2766.JPG",
+   "skip": "reflection of a person in the laptop; IMG_2767 shows the same slide"
+  },
+  {
+   "file": "IMG_2767.JPG",
+   "paper": "984"
+  },
+  {
+   "file": "IMG_2768.JPG",
+   "paper": "1919"
+  },
+  {
+   "file": "IMG_2769.JPG",
+   "skip": "a person's name badge, not a paper"
+  },
+  {
+   "file": "IMG_2771.JPG",
+   "paper": "63"
+  },
+  {
+   "file": "IMG_2772.JPG",
+   "paper": "4256",
+   "blur": [
+    [
+     0,
+     530,
+     350,
+     1200
+    ]
+   ]
+  },
+  {
+   "file": "IMG_2773.JPG",
+   "paper": "1371"
+  },
+  {
+   "file": "IMG_2774.JPG",
+   "paper": "5056"
+  }
+ ]
 }

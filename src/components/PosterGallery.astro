@@ -1,22 +1,22 @@
 ---
-// Poster photos with a zoomable lightbox (src/scripts/lightbox.js).
-//   layout "stack": full content width, natural aspect (a paper page with 1–2 photos)
-//   layout "grid":  uniform 4:3 cards with title, time and room (the Posters page)
+// Conference photos (posters, talk slides, events) with a zoomable lightbox (src/scripts/lightbox.js).
+//   layout "stack": full content width, natural aspect (a paper page with a few photos)
+//   layout "grid":  uniform 4:3 cards with a caption (the Photos page)
+// caption: { title, meta, href? } — href links the card and lightbox caption to the paper or workshop.
 // width/height come from the zoom image, so the browser reserves space before images load.
 import { url } from "../lib/url.js";
 
 interface Photo { src: string; thumb: string; zoom: string; width: number; height: number }
-interface Paper { id: string; title: string; day: string; time: string; room: string; code: string }
+interface Caption { title: string; meta: string; href?: string }
 interface Props {
-  items: { photo: Photo; paper: Paper }[];
+  items: { photo: Photo; caption: Caption }[];
   layout?: "stack" | "grid";
 }
 const { items, layout = "grid" } = Astro.props;
-const DATE: Record<string, string> = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 Sep" };
 const sizes = layout === "stack" ? "(max-width: 860px) 100vw, 812px" : "(max-width: 600px) 100vw, 300px";
 ---
 <div class={`poster-gallery ${layout}`} data-gallery>
-  {items.map(({ photo, paper }, i) => (
+  {items.map(({ photo, caption }, i) => (
     <figure class="poster-card">
       <a
         href={url(photo.zoom)}
@@ -24,7 +24,7 @@ const sizes = layout === "stack" ? "(max-width: 860px) 100vw, 812px" : "(max-wid
         data-pswp-height={photo.height}
         target="_blank"
         rel="noopener"
-        aria-label={`Open poster photo ${i + 1} of ${items.length} in zoomable viewer: ${paper.title}`}
+        aria-label={`Open photo ${i + 1} of ${items.length} in zoomable viewer: ${caption.title}`}
       >
         <img
           src={url(layout === "stack" ? photo.src : photo.thumb)}
@@ -32,7 +32,7 @@ const sizes = layout === "stack" ? "(max-width: 860px) 100vw, 812px" : "(max-wid
           sizes={sizes}
           width={photo.width}
           height={photo.height}
-          alt={`Poster photo: ${paper.title}`}
+          alt={`Photo: ${caption.title}`}
           loading={i === 0 && layout === "stack" ? "eager" : "lazy"}
           decoding="async"
         />
@@ -40,15 +40,15 @@ const sizes = layout === "stack" ? "(max-width: 860px) 100vw, 812px" : "(max-wid
       </a>
       {layout === "grid" && (
         <figcaption>
-          <a href={url(`paper/${paper.id}.html`)}>{paper.title}</a>
-          <span class="muted">{DATE[paper.day]} {paper.time} · Rm {paper.room}</span>
+          {caption.href ? <a href={caption.href}>{caption.title}</a> : <b>{caption.title}</b>}
+          <span class="muted">{caption.meta}</span>
         </figcaption>
       )}
       <template class="pswp-caption">
         <div class="pswp-cap">
-          <b>{paper.title}</b>
-          <span>{DATE[paper.day]} {paper.time} · Rm {paper.room} · {paper.code}</span>
-          {layout === "grid" && <a href={url(`paper/${paper.id}.html`)}>Paper page →</a>}
+          <b>{caption.title}</b>
+          <span>{caption.meta}</span>
+          {layout === "grid" && caption.href && <a href={caption.href}>Details →</a>}
         </div>
       </template>
     </figure>

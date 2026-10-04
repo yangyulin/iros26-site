@@ -12,3 +12,6 @@ dist/
 
 # PDF lookup cache (scripts/find_pdfs.py)
 data/raw/pdf_cache.json
+
+# Vision scan output (OCR text incl. names seen in photos; regenerate with scripts/vision_scan.swift)
+photos/scan.json

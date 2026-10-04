@@ -1,22 +1,59 @@
 ---
-// Every poster photo in one zoomable grid, in conference order.
+// Every conference photo in zoomable grids: papers (posters and talk slides), workshops, events.
+// Kept at posters.html so earlier links keep working.
 import Base from "../layouts/Base.astro";
 import PosterGallery from "../components/PosterGallery.astro";
 import papers from "../../data/papers.json";
-import { loadNotes } from "../lib/notes.js";
+import workshops from "../../data/workshops.json";
+import { loadAllNotes } from "../lib/notes.js";
+import { eventCaption, paperCaption, workshopCaption } from "../lib/captions.js";
 
-const notes = await loadNotes();
-const items = papers
-  .filter((p) => notes.has(p.id))
-  .flatMap((paper) => notes.get(paper.id).data.photos.map((photo) => ({ photo, paper })));
+const notes = await loadAllNotes();
+const paperItems = papers
+  .filter((p) => notes.papers.has(p.id))
+  .flatMap((p) => notes.papers.get(p.id).data.photos.map((photo) => ({ photo, caption: paperCaption(p) })));
+const workshopGroups = workshops
+  .filter((w) => notes.workshops.has(w.id))
+  .map((w) => ({ w, items: notes.workshops.get(w.id).data.photos.map((photo) => ({ photo, caption: workshopCaption(w) })) }));
+const eventGroups = notes.events.map((e) => ({
+  id: e.data.event,
+  title: e.data.title ?? e.data.event,
+  items: e.data.photos.map((photo) => ({ photo, caption: eventCaption(e.data.title ?? e.data.event) })),
+}));
+const total = paperItems.length + [...workshopGroups, ...eventGroups].reduce((n, g) => n + g.items.length, 0);
 ---
-<Base title="IROS 2026 Posters" active="posters" description="Poster photos from IROS 2026, zoomable to read.">
+<Base title="IROS 2026 Photos" active="posters" description="My photos from IROS 2026: posters, talk slides, workshops and events, zoomable to read.">
   <main class="posters-page">
-    <h1>Poster photos</h1>
+    <h1>Photos</h1>
     <p class="summary">
-      {items.length} photos of {notes.size} posters. Click a photo to open it; scroll, pinch or press Z to zoom,
-      drag to pan, ← → to move between posters, Esc to close.
+      {total} photos: {paperItems.length} from {notes.papers.size} papers, the rest from {workshopGroups.length}
+      workshops and {eventGroups.length} events. Click a photo to open it; scroll, pinch or press Z to zoom, drag to pan,
+      ← → to move, Esc to close.
     </p>
-    <PosterGallery layout="grid" items={items} />
+    <nav class="photo-toc" aria-label="Sections">
+      <a href="#papers">Papers ({paperItems.length})</a>
+      {workshopGroups.map(({ w, items }) => <a href={`#${w.id.toLowerCase()}`}>{w.id} ({items.length})</a>)}
+      {eventGroups.map((g) => <a href={`#${g.id}`}>{g.title.split(/ · | \(/)[0]} ({g.items.length})</a>)}
+    </nav>
+
+    <section id="papers" class="photo-section">
+      <h2>Papers — posters and talk slides</h2>
+      <PosterGallery layout="grid" items={paperItems} />
+    </section>
+
+    {workshopGroups.map(({ w, items }) => (
+      <section id={w.id.toLowerCase()} class="photo-section">
+        <h2>{w.title}</h2>
+        <p class="muted">{w.id} · {w.day} {w.start}–{w.end} · Rm {w.room} · {w.type}</p>
+        <PosterGallery layout="grid" items={items} />
+      </section>
+    ))}
+
+    {eventGroups.map((g) => (
+      <section id={g.id} class="photo-section">
+        <h2>{g.title}</h2>
+        <PosterGallery layout="grid" items={g.items} />
+      </section>
+    ))}
   </main>
 </Base>

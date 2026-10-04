@@ -11,16 +11,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import add_photos  # noqa: E402
 
 
-def make_root(tmp, matches):
+def make_root(tmp, matches, events=None):
     root = Path(tmp)
     (root / "data").mkdir()
     (root / "data" / "papers.json").write_text(json.dumps([{"id": "7"}, {"id": "8"}]))
+    (root / "data" / "workshops.json").write_text(json.dumps([{"id": "W04"}]))
     (root / "photos" / "raw").mkdir(parents=True)
     exif = Image.Exif()
     exif[0x010F] = "Apple"                 # Make
     exif[0x0132] = "2026:09:30 16:50:04"   # DateTime
     Image.new("RGB", (4032, 3024), "white").save(root / "photos" / "raw" / "IMG_1.JPG", exif=exif)
-    (root / "photos" / "matches.json").write_text(json.dumps({"photos": matches}))
+    (root / "photos" / "matches.json").write_text(json.dumps({"events": events or {}, "photos": matches}))
     return root
 
 
@@ -62,6 +63,25 @@ class AddPhotos(unittest.TestCase):
             root = make_root(tmp, [{"file": "IMG_1.JPG", "paper": "999"}])
             with self.assertRaises(SystemExit):
                 add_photos.run(root)
+
+
+    def test_workshop_and_event_notes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(tmp, [
+                {"file": "IMG_1.JPG", "workshop": "W04"},
+                {"file": "IMG_1.JPG", "event": "welcome-ceremony"},
+            ], events={"welcome-ceremony": "Welcome Ceremony"})
+            add_photos.run(root)
+            self.assertTrue((root / "src/content/notes/w04.md").read_text().startswith('---\nworkshop: "W04"\nphotos:\n'))
+            self.assertTrue((root / "public/notes/w04/img_1.webp").exists())
+            event = (root / "src/content/notes/welcome-ceremony.md").read_text()
+            self.assertTrue(event.startswith('---\nevent: "welcome-ceremony"\ntitle: "Welcome Ceremony"\nphotos:\n'))
+
+    def test_unknown_workshop_or_event_fails(self):
+        for entry in [{"file": "IMG_1.JPG", "workshop": "W99"}, {"file": "IMG_1.JPG", "event": "nope"}]:
+            with tempfile.TemporaryDirectory() as tmp:
+                with self.assertRaises(SystemExit):
+                    add_photos.run(make_root(tmp, [entry]))
 
 
 if __name__ == "__main__":

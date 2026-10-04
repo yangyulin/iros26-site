@@ -314,3 +314,14 @@ nav { align-items: center; }
   font-size: 14px; font-weight: 600; text-decoration: none;
 }
 .iv-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Photos page sections */
+.photo-toc { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.photo-toc a {
+  padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px;
+  color: var(--text); font-size: 13px; text-decoration: none;
+}
+.photo-toc a:hover { border-color: var(--accent); color: var(--accent); }
+.photo-section { scroll-margin-top: 16px; }
+.photo-section h2 { font-size: 19px; margin: 30px 0 4px; }
+.photo-section > .muted { margin: 0 0 14px; font-size: 13px; }
