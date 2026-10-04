@@ -10,7 +10,8 @@
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
-    "astro": "^6.4.8"
+    "astro": "^6.4.8",
+    "photoswipe": "^5.4.4"
   },
   "devDependencies": {
     "vitest": "^5.0.3"

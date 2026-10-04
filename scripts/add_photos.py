@@ -2,7 +2,9 @@
 
 Reads photos/matches.json (photo -> paper id, optional crop/blur boxes) and the
 originals in photos/raw/, writes resized, EXIF-free WebP files to
-public/notes/<paper id>/ and the photo list into the front matter of
+public/notes/<paper id>/ (480 px thumb, 1600 px display, up to 3000 px zoom
+for reading poster text in the lightbox) and the photo list, with the zoom
+image's pixel size, into the front matter of
 src/content/notes/<paper id>.md. The note body (your text) is never touched.
 
     python3 scripts/add_photos.py
@@ -13,7 +15,7 @@ from pathlib import Path
 from PIL import Image, ImageFilter, ImageOps
 
 PREVIEW = 1600  # boxes in matches.json are in this preview's coordinates
-FULL, THUMB = 1600, 480
+FULL, THUMB, ZOOM = 1600, 480, 3000
 
 
 def scaled(box, scale):
@@ -45,7 +47,8 @@ def note_body(text):
 def note_file(pid, photos, body):
     lines = ["---", f'paper: "{pid}"', "photos:"]
     for ph in photos:
-        lines += [f"  - src: {ph['src']}", f"    thumb: {ph['thumb']}"]
+        lines += [f"  - src: {ph['src']}", f"    thumb: {ph['thumb']}", f"    zoom: {ph['zoom']}",
+                  f"    width: {ph['width']}", f"    height: {ph['height']}"]
     return "\n".join(lines) + "\n---\n" + body
 
 
@@ -64,13 +67,17 @@ def run(root):
         out.mkdir(parents=True, exist_ok=True)
         stem = Path(entry["file"]).stem.lower()
         im = clean_image(root / "photos" / "raw" / entry["file"], entry)
-        for size, name in [(FULL, f"{stem}.webp"), (THUMB, f"{stem}-thumb.webp")]:
+        sizes = {}
+        for size, name, quality in [(FULL, f"{stem}.webp", 82), (THUMB, f"{stem}-thumb.webp", 82),
+                                    (ZOOM, f"{stem}-zoom.webp", 80)]:
             copy = im.copy()
             copy.thumbnail((size, size))
-            copy.save(out / name, "WEBP", quality=82)
-        photos_by_paper.setdefault(pid, []).append(
-            {"src": f"notes/{pid}/{stem}.webp", "thumb": f"notes/{pid}/{stem}-thumb.webp"}
-        )
+            copy.save(out / name, "WEBP", quality=quality)
+            sizes[size] = copy.size
+        photos_by_paper.setdefault(pid, []).append({
+            "src": f"notes/{pid}/{stem}.webp", "thumb": f"notes/{pid}/{stem}-thumb.webp",
+            "zoom": f"notes/{pid}/{stem}-zoom.webp", "width": sizes[ZOOM][0], "height": sizes[ZOOM][1],
+        })
         print(f"{entry['file']} -> public/notes/{pid}/{stem}.webp")
 
     notes_dir = root / "src" / "content" / "notes"

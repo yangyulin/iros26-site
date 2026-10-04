@@ -8,7 +8,17 @@ const notes = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/notes" }),
   schema: z.object({
     paper: z.string(),
-    photos: z.array(z.object({ src: z.string(), thumb: z.string() })).default([]),
+    photos: z
+      .array(
+        z.object({
+          src: z.string(),
+          thumb: z.string(),
+          zoom: z.string(),
+          width: z.number().int().positive(),
+          height: z.number().int().positive(),
+        })
+      )
+      .default([]),
   }),
 });
 

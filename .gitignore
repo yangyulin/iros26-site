@@ -9,3 +9,6 @@ photos/preview/
 node_modules/
 dist/
 .astro/
+
+# PDF lookup cache (scripts/find_pdfs.py)
+data/raw/pdf_cache.json

@@ -1,8 +1,10 @@
 ---
 import Base from "../../layouts/Base.astro";
+import PosterGallery from "../../components/PosterGallery.astro";
 import { render } from "astro:content";
 import papers from "../../../data/papers.json";
 import { loadNotes } from "../../lib/notes.js";
+import { pdfs } from "../../lib/pdfs.js";
 import { url } from "../../lib/url.js";
 
 export async function getStaticPaths() {
@@ -28,6 +30,7 @@ const hasText = Boolean(note?.body?.trim());
 const affs = [...new Set(p.affiliations.filter(Boolean))];
 const listUrl = (params) => url(`index.html#${new URLSearchParams(params)}`);
 const DATE = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 Sep" };
+const pdf = pdfs[p.id] ?? null;
 ---
 <Base title={`${p.title} — IROS 2026`} description={`IROS 2026 paper #${p.id}: ${p.title}`}>
   <main class="paper-page">
@@ -38,6 +41,11 @@ const DATE = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 S
         {p.relevant && <span class="badge">calib &amp; state est.</span>}
         {p.session_type === "Award Candidates" && <span class="badge award">award candidate</span>}
         <button type="button" class="star-btn inline" data-star={p.id} aria-pressed="false">☆ Bookmark</button>
+        {pdf && (
+          <a class="pdf-btn" href={pdf.url} target="_blank" rel="noopener">
+            PDF{pdf.source === "arxiv" ? " (arXiv)" : ""} ↗
+          </a>
+        )}
       </p>
       <p class="authors">{p.authors.join(", ")}</p>
       {affs.length > 0 && <p class="affs">{affs.join(" · ")}</p>}
@@ -53,13 +61,7 @@ const DATE = { Monday: "Mon 28 Sep", Tuesday: "Tue 29 Sep", Wednesday: "Wed 30 S
           <h2>Poster notes</h2>
           {hasText && Content && <div class="note-text"><Content /></div>}
           {note.data.photos.length > 0 && (
-            <div class="note-photos">
-              {note.data.photos.map((ph) => (
-                <a href={url(ph.src)} target="_blank" rel="noopener">
-                  <img src={url(ph.thumb)} alt={`Poster photo: ${p.title}`} loading="lazy" />
-                </a>
-              ))}
-            </div>
+            <PosterGallery layout="stack" items={note.data.photos.map((photo) => ({ photo, paper: p }))} />
           )}
         </section>
       )}

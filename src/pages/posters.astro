@@ -1,0 +1,22 @@
+---
+// Every poster photo in one zoomable grid, in conference order.
+import Base from "../layouts/Base.astro";
+import PosterGallery from "../components/PosterGallery.astro";
+import papers from "../../data/papers.json";
+import { loadNotes } from "../lib/notes.js";
+
+const notes = await loadNotes();
+const items = papers
+  .filter((p) => notes.has(p.id))
+  .flatMap((paper) => notes.get(paper.id).data.photos.map((photo) => ({ photo, paper })));
+---
+<Base title="IROS 2026 Posters" active="posters" description="Poster photos from IROS 2026, zoomable to read.">
+  <main class="posters-page">
+    <h1>Poster photos</h1>
+    <p class="summary">
+      {items.length} photos of {notes.size} posters. Click a photo to open it; scroll, pinch or press Z to zoom,
+      drag to pan, ← → to move between posters, Esc to close.
+    </p>
+    <PosterGallery layout="grid" items={items} />
+  </main>
+</Base>

@@ -34,12 +34,18 @@ class AddPhotos(unittest.TestCase):
             add_photos.run(root)
             full = Image.open(root / "public/notes/7/img_1.webp")
             thumb = Image.open(root / "public/notes/7/img_1-thumb.webp")
+            zoom = Image.open(root / "public/notes/7/img_1-zoom.webp")
             self.assertEqual(full.size, (1600, 1200))  # 800x600 preview px = 2016x1512 raw px, shrunk to 1600
+            self.assertEqual(zoom.size, (2016, 1512))  # below the 3000 px zoom cap: kept at raw resolution
             self.assertLessEqual(max(thumb.size), 480)
-            self.assertEqual(len(full.getexif()), 0)
+            self.assertEqual(len(full.getexif()) + len(zoom.getexif()), 0)
             note = (root / "src/content/notes/7.md").read_text()
             self.assertTrue(note.startswith('---\npaper: "7"\nphotos:\n'))
-            self.assertIn("  - src: notes/7/img_1.webp\n    thumb: notes/7/img_1-thumb.webp\n", note)
+            self.assertIn(
+                "  - src: notes/7/img_1.webp\n    thumb: notes/7/img_1-thumb.webp\n"
+                "    zoom: notes/7/img_1-zoom.webp\n    width: 2016\n    height: 1512\n",
+                note,
+            )
             self.assertFalse((root / "src/content/notes/8.md").exists())
 
     def test_rerun_keeps_note_body(self):

@@ -5,7 +5,7 @@ import { url } from "../lib/url.js";
 
 interface Props {
   title: string;
-  active?: "papers" | "workshops" | "schedule" | null;
+  active?: "papers" | "posters" | "workshops" | "schedule" | null;
   description?: string;
 }
 const {
@@ -15,6 +15,7 @@ const {
 } = Astro.props;
 const nav = [
   ["papers", "index.html", "Papers"],
+  ["posters", "posters.html", "Posters"],
   ["workshops", "workshops.html", "Workshops"],
   ["schedule", "schedule.html", "Schedule"],
 ];

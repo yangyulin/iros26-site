@@ -41,14 +41,18 @@ function paperHtml(p, ts) {
     (p.relevant ? `<span class="badge">calib &amp; state est.</span>` : "") +
     (p.session_type === "Award Candidates" ? `<span class="badge award">award candidate</span>` : "") +
     noteBadge(p);
+  const thumb = notes[p.id]?.thumb
+    ? `<a class="note-thumb" href="${url(`paper/${p.id}.html`)}" aria-label="Poster photo: ${esc(p.title)}"><img src="${url(notes[p.id].thumb)}" alt="" width="120" height="90" loading="lazy" decoding="async"></a>`
+    : "";
   return `<article class="paper${p.relevant ? " is-rel" : ""}" id="p${esc(p.id)}">
     <div class="when"><b>${p.time}</b>${DAY_LABEL[p.day].slice(0, 3)} · Rm ${esc(p.room)}</div>
     <div>
+      ${thumb}
       <h3><a class="title-link" href="${url(`paper/${p.id}.html`)}">${highlight(p.title, ts)}</a>${badges}</h3>
       ${authorsHtml(p, ts)}
       <div class="meta">
         <button type="button" data-session="${esc(p.session_id)}">${highlight(p.session, ts)}</button>
-        · ${esc(p.session_type)} · ${esc(p.code)}
+        · ${esc(p.session_type)} · ${esc(p.code)}${p.pdf ? ` · <a class="pdf-link" href="${esc(p.pdf)}" target="_blank" rel="noopener">PDF</a>` : ""}
       </div>
       <div class="kw">${p.keywords.map((k) => `<button type="button" data-kw="${esc(k)}">${highlight(k, ts)}</button>`).join("")}</div>
     </div>
