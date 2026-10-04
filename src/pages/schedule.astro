@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import schedule from "../../data/schedule.json";
+import workshops from "../../data/workshops.json";
+---
+<Base title="IROS 2026 Schedule" active="schedule">
+  <main class="sched">
+    <div class="sched-bar">
+      <div id="days" class="chips" role="tablist" aria-label="Day"></div>
+      <label class="plan-toggle"><input id="plan" type="checkbox" checked /> Show my bookmarks <span id="plan-count" class="muted"></span></label>
+    </div>
+    <p id="summary" class="summary">Loading schedule…</p>
+    <div id="timeline"></div>
+    <p class="muted small sched-foot">
+      Times are Pittsburgh local (EDT). Blocks come from the official program overview; talk and workshop blocks
+      link to the matching papers and workshops. Bookmarks are the ★ you set on the Papers and Workshops pages,
+      kept in this browser.
+    </p>
+  </main>
+  <script type="application/json" id="schedule-data" set:html={JSON.stringify(schedule)} />
+  <script type="application/json" id="workshops-data" set:html={JSON.stringify(workshops)} />
+  <script>
+    import "../scripts/schedule-page.js";
+  </script>
+</Base>
