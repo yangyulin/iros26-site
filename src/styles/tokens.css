@@ -1,0 +1,39 @@
+/* MVIS (openmvis.com) palette: sky accent, light default, slate dark. */
+:root {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --accent: #0284c7;
+  --accent-soft: #e0f2fe;
+  --accent-strong: #075985;
+  --rel: #b45309;
+  --rel-soft: #fef3c7;
+  --star: #d97706;
+  --mark: #fef08a;
+  --violet: #7c3aed;
+  --teal: #0f766e;
+  --radius: 8px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel-2: #1e293b;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --line: #334155;
+  --accent: #38bdf8;
+  --accent-soft: #0c4a6e;
+  --accent-strong: #bae6fd;
+  --rel: #fbbf24;
+  --rel-soft: #422006;
+  --star: #fbbf24;
+  --mark: #713f12;
+  --violet: #a78bfa;
+  --teal: #2dd4bf;
+  color-scheme: dark;
+}

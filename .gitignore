@@ -4,3 +4,8 @@ data/raw/papers_gisbi-kim.json
 # Full-size originals from Drive; only resized copies are published.
 photos/raw/
 photos/preview/
+
+# Astro
+node_modules/
+dist/
+.astro/

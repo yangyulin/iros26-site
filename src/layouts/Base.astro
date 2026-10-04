@@ -1,0 +1,67 @@
+---
+import "../styles/tokens.css";
+import "../styles/site.css";
+import { url } from "../lib/url.js";
+
+interface Props {
+  title: string;
+  active?: "papers" | "workshops" | "schedule" | null;
+  description?: string;
+}
+const {
+  title,
+  active = null,
+  description = "Searchable IROS 2026 program: papers, workshops, schedule and poster notes.",
+} = Astro.props;
+const nav = [
+  ["papers", "index.html", "Papers"],
+  ["workshops", "workshops.html", "Workshops"],
+  ["schedule", "schedule.html", "Schedule"],
+];
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={url("favicon.svg")} />
+    <script is:inline>
+      (() => {
+        try {
+          if (localStorage.getItem("iros26.theme") === "dark") document.documentElement.dataset.theme = "dark";
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href={url("index.html")}>IROS 2026 <span>Pittsburgh · 27 Sep – 1 Oct</span></a>
+      <nav>
+        {nav.map(([key, href, label]) => (
+          <a href={url(href)} aria-current={active === key ? "page" : undefined}>{label}</a>
+        ))}
+        <button id="theme-toggle" class="theme-btn" type="button" aria-label="Toggle dark mode">◐</button>
+      </nav>
+    </header>
+    <slot />
+    <footer class="site-footer">
+      Program data: IROS 2026 official program; paper index parsed by
+      <a href="https://github.com/gisbi-kim/iros2026-explorer">gisbi-kim/iros2026-explorer</a>.
+      Poster photos and notes: Yulin Yang. <a href="https://github.com/yangyulin/iros26-site">Source</a>
+    </footer>
+    <script>
+      import { KEYS } from "../lib/stars.js";
+
+      document.getElementById("theme-toggle")?.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem(KEYS.theme, next);
+        } catch {}
+        document.dispatchEvent(new CustomEvent("themechange", { detail: next }));
+      });
+    </script>
+  </body>
+</html>
